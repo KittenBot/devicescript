@@ -10,8 +10,7 @@
         "embedded"
     ],
     "author": "Microsoft",
-    "main": "./built/devicescript-compiler.node.cjs",
-    "module": "./built/devicescript-compiler.js",
+    "module": "./built/devicescript-compiler.mjs",
     "types": "./built/types/compiler/src/devicescript.d.ts",
     "scripts": {
         "dist": "yarn install && yarn build",
