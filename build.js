@@ -94,7 +94,7 @@ const files = {
     "interop/built/devicescript-interop.mjs": "interop/src/interop.ts",
     "interop/built/devicescript-interop.node.cjs": "interop/src/interop.ts",
 
-    "compiler/built/devicescript-compiler.js": "compiler/src/devicescript.ts",
+    "compiler/built/devicescript-compiler.mjs": "compiler/src/devicescript.ts",
     "compiler/built/devicescript-compiler.node.cjs":
         "compiler/src/devicescript.ts",
 
