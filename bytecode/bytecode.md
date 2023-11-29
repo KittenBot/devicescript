@@ -11,7 +11,7 @@ Jacdac service specifications, and runtime configuration (`configureHardware()` 
 
 Functions are sequences of opcodes defined below.
 Opcodes are divided into expressions (with return type) which do not modify state,
-and statements (no return type; `ret_val()` expression is used to retrive the logical
+and statements (no return type; `ret_val()` expression is used to retrieve the logical
 result of a last statement).
 Many opcodes (both expressions and statements) can also throw an exception.
 
@@ -21,7 +21,7 @@ For a more highlevel description of runtime and bytecode, see [Runtime implement
 
     img_version_major = 2
     img_version_minor = 15
-    img_version_patch = 1
+    img_version_patch = 20
     img_version = $version
     magic0 = 0x53766544 // "DevS"
     magic1 = 0xf1296e0a

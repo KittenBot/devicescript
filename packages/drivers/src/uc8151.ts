@@ -2,13 +2,13 @@
 // by Pimoroni Ltd, MIT license
 
 import { GPIOMode, InputPin, LOW, delay, isSimulator } from "@devicescript/core"
-import { FourWireDriver, FourWireOptions } from "./st7735"
+import { FourWireDriver, FourWireOptions } from "./stlikedisplay"
 import {
     Display,
     Image,
     SpiImageFlags,
     spiSendImage,
-    Palette
+    Palette,
 } from "@devicescript/graphics"
 import { DriverError } from "./core"
 
@@ -27,11 +27,15 @@ export interface UC8151Options extends FourWireOptions {
 
 export class UC8151Driver
     extends FourWireDriver<UC8151Options>
-    implements Display {
+    implements Display
+{
     public readonly palette: Palette
     private resflag: number
 
-    constructor(public readonly image: Image, options: UC8151Options) {
+    constructor(
+        public readonly image: Image,
+        options: UC8151Options
+    ) {
         super(options)
 
         const sm = Math.min(this.image.width, this.image.height)

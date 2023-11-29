@@ -6,7 +6,10 @@ type DsServer = typeof ds & {
     _serverSend(serviceIndex: number, pkt: ds.Packet): Promise<void>
 }
 
-export interface ServerOptions { }
+export interface ServerOptions {
+    roleName?: string
+    simOk?: boolean
+}
 
 let eventWorker: SequentialWorker
 
@@ -19,7 +22,7 @@ export class Server implements ds.ServerInterface {
     constructor(
         public spec: ds.ServiceSpec,
         options?: ServerOptions
-    ) { }
+    ) {}
 
     async _send(pkt: ds.Packet) {
         if (this.debug) console.debug("Out SRV", pkt, pkt.spec)
@@ -75,7 +78,7 @@ export class ControlServer extends Server implements ds.ControlServerSpec {
         r.unshift(flags, pktCount, reserved)
         return r
     }
-    noop() { }
+    noop() {}
 
     identify(): ds.AsyncValue<void> {
         // TODO?
@@ -165,10 +168,10 @@ function attachName(s: ds.BaseServerSpec, name: string) {
     if (name) s.instanceName = () => name
 }
 
-export function startServer(s: ds.ServerInterface, name?: string) {
+export function startServer(s: ds.ServerInterface, options?: ServerOptions) {
     if (!servers) {
         servers = [new ControlServer()]
-            ; (ds as DsServer)._onServerPacket = _onServerPacket
+        ;(ds as DsServer)._onServerPacket = _onServerPacket
         setInterval(async () => {
             const iserv = servers[0] as ds.ControlServerSpec
             const spec = ds.Control.spec.lookup("announce")
@@ -189,7 +192,7 @@ export function startServer(s: ds.ServerInterface, name?: string) {
         if (o === s) break
         if (o.spec.classIdentifier === s.spec.classIdentifier) off++
     }
-    let roleName = name
+    let roleName = options?.roleName
     if (!roleName) roleName = s.spec.name + "_" + off
     attachName(s, roleName)
     return `${roleName}[app:${off}]`

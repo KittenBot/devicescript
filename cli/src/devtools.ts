@@ -3,7 +3,7 @@ const WebSocket = require("faye-websocket")
 import http from "http"
 import url from "url"
 import net from "net"
-import { error, log } from "./command"
+import { error, isInteractive, log, setInteractive } from "./command"
 import { watch } from "fs-extra"
 import { resolveBuildConfig, SrcFile } from "@devicescript/compiler"
 import {
@@ -100,6 +100,7 @@ export async function devtools(
     const tcpPort = 8082
     const dbgPort = 8083
 
+    if (options.vscode) setInteractive(false) // don't prompt for anything
     if (options.diagnostics) Flags.diagnostics = true
 
     overrideConsoleDebug()
@@ -111,7 +112,7 @@ export async function devtools(
     const traceFd = options.trace ? await open(options.trace, "w") : null
 
     // passive bus to sniff packets
-    const transports = createTransports(options)
+    const transports = await createTransports(options)
     const bus = new JDBus(transports, {
         client: false,
         disableRoleManager: true,
@@ -207,18 +208,19 @@ function startProxyServers(
     options: DevToolsOptions
 ) {
     let clientId = 0
-
+    const { vscode } = options
     const bus = devtoolsSelf.bus
 
     const listenHost = options.internet ? undefined : "127.0.0.1"
     const domain = listenHost || "localhost"
-    log(`   http     : http://${domain}:${port}`)
-    log(`   websocket: ws://${domain}:${port}`)
+    log(`   dashboard  : http://${domain}:${port}/`)
+    log(`   connection : http://${domain}:${port}/connect`)
+    log(`   websocket  : ws://${domain}:${port}`)
     const server = http.createServer(function (req, res) {
         const parsedUrl = url.parse(req.url)
         const pathname = parsedUrl.pathname
-        let route: "vscode" | "connect"
-        if (pathname === "/") route = "vscode"
+        let route: "vscode" | "connect" | "dashboard"
+        if (pathname === "/") route = vscode ? "vscode" : "dashboard"
         else if (pathname === "/connect") route = "connect"
         if (!route) res.statusCode = 404
         else
@@ -258,7 +260,7 @@ function startProxyServers(
     })
     server.listen(port, listenHost)
 
-    log(`   tcpsocket: tcp://${domain}:${tcpPort}`)
+    log(`   tcpsocket  : tcp://${domain}:${tcpPort}`)
     const tcpServer = net.createServer(socket => {
         const sender = "tcp" + ++clientId
         const client: DevToolsClient = socket as any
@@ -362,7 +364,7 @@ function startDbgServer(port: number, options: DevToolsOptions) {
 
     const listenHost = options.internet ? undefined : "127.0.0.1"
     const domain = listenHost || "localhost"
-    console.log(`   dbgserver: tcp://${domain}:${port}`)
+    console.log(`   dbgserver  : tcp://${domain}:${port}`)
     net.createServer(async socket => {
         console.log("dbgserver: connection")
         let session: DsDapSession
@@ -386,7 +388,7 @@ function startDbgServer(port: number, options: DevToolsOptions) {
 }
 
 async function connectCmd(req: ConnectReqArgs) {
-    await connectTransport(devtoolsSelf.bus, req)
+    await connectTransport(devtoolsSelf, req)
 }
 
 async function buildCmd(args: BuildReqArgs) {
@@ -471,10 +473,9 @@ function deployService(args: BuildReqArgs) {
             lost: false,
         })
         if (services.length > 1)
-            throw new Error(`Multiple DeviceScript Managers found.`)
+            throw new Error(`Multiple DeviceScript device found.`)
         else if (services.length == 0)
-            throw new Error(`No DeviceScript Managers found.`)
-
+            throw new Error(`No DeviceScript device found.`)
         return services[0]
     }
 

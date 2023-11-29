@@ -10,7 +10,7 @@ import {
 } from "@devicescript/interop"
 import { DeviceCatalog, deviceCatalogImage, unique } from "jacdac-ts"
 import { resolveBuildConfig } from "./specgen"
-import { assert } from "./jdutil"
+import { assert, ellipseFirstSentence } from "./jdutil"
 
 export function boardInfos(info: RepoInfo) {
     return Object.values(info.boards).map(b =>
@@ -130,6 +130,7 @@ function deviceConfigToMarkdown(
     const { id } = spec || {}
     const boardJson = normalizeDeviceConfig(board, { ignoreFirmwareUrl: true })
     const info = boardInfo(board, arch)
+    const fdevId = boardIdToFilename(devId)
 
     if (info.errors?.length) {
         console.error(`errors in ${board.id}:\n${info.errors.join("\n")}`)
@@ -149,7 +150,9 @@ description: ${devName}
             : undefined,
         `\n## Features\n`,
         ...info.features.map(f => `-  ${f}`),
+        `\n{@import optional ./${fdevId}-features.mdp}\n`,
         ...info.services.map(f => `-  Service: ${f}`),
+        `\n{@import optional ./${fdevId}-services.mdp}\n`,
         !boardJson.i2c &&
             `
 :::caution
@@ -174,6 +177,7 @@ select "${devName}".
         `\`\`\`ts
 import { pins, board } from "@dsboard/${devId}"
 \`\`\``,
+        `\n{@import optional ./${devId.replace(/_/g, "-")}-examples.mdp}`,
         `\n## Firmware update
 
 In Visual Studio Code,
@@ -209,6 +213,10 @@ ${JSON.stringify(boardJson, null, 4)}
     }
 }
 
+function boardIdToFilename(boardid: string) {
+    return boardid.replace(/_/g, "-")
+}
+
 export function boardMarkdownFiles() {
     const buildConfig = resolveBuildConfig()
     const { boards, archs } = buildConfig
@@ -217,27 +225,28 @@ export function boardMarkdownFiles() {
     const boardsjson: any = {}
     Object.keys(boards).forEach(boardid => {
         const board = boards[boardid]
-        const { archId, productId, devName } = board
+        const { archId, productId, devName, $description, url } = board
         if (!archId || archId === "wasm" || archId == "native") return
         const spec: jdspec.DeviceSpec =
             catalog.specificationFromProductIdentifier(parseAnyInt(productId))
         const aid = architectureFamily(archId)
-        const pa = `${aid}/${boardid.replace(/_/g, "-")}`
+        const pa = `${aid}/${boardIdToFilename(boardid)}`
         r[`${pa}.mdx`] = deviceConfigToMarkdown(
             board,
             archs[board.archId],
             spec
         )
 
+        const descr = ellipseFirstSentence($description) || ""
         const boardjson: any = board
         boardsjson[boardid] = boardjson
         const aidmd = `${aid}/boards.mdp`
-        const img = deviceCatalogImage(spec, "avatar")
-        if (img) {
+        const img = deviceCatalogImage(spec, "preview")
+        if (img && url) {
             r[aidmd] =
                 (r[aidmd] || "") +
                 `
-- [![photograph of ${devName}](${img}) ${devName}](/devices/${pa})`
+<DeviceCard image="${img}" href="/devices/${pa}" title="${devName}" description="${descr}" />`
             boardjson.img = deviceCatalogImage(spec, "catalog")
         }
     })

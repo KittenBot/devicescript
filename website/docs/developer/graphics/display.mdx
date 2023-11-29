@@ -9,8 +9,8 @@ The [Display](https://github.com/microsoft/devicescript/blob/main/packages/graph
 interface provides an abstraction over a small screen. The `Display` interface is implemented
 for various hardware peripherical and can be used with various services.
 
--   [SSD1306](/api/drivers/ssd1306), OLED monochrome, I2C
--   [ST7789, ST7735, ILI9163](/api/drivers/st7789), LCD color, SPI
+-   [SSD1306](/api/drivers/ssd1306) or [SH110X](/api/drivers/sh110x), OLED monochrome, I2C
+-   [ST7789, ST7735, ILI9163, ILI9341](/api/drivers/st7789), LCD color, SPI
 -   [UC8151](/api/drivers/uc8151), eInk monochrome, SPI
 
 :::caution I8080 not supported
@@ -47,9 +47,12 @@ Using the service is compatible with the simulator.
 -   [Source](https://github.com/microsoft/devicescript/blob/main/packages/drivers/src/characterscreen.ts)
 
 ```ts
-import { SSD1306Driver, startCharacterScreen } from "@devicescript/drivers"
+import {
+    SSD1306Driver,
+    startCharacterScreenDisplay,
+} from "@devicescript/drivers"
 
-const screen = await startCharacterScreen(
+const screen = await startCharacterScreenDisplay(
     new SSD1306Driver({ width: 128, height: 64 })
 )
 await screen.message.write(`hello

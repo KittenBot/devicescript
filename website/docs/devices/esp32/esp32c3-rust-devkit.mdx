@@ -14,7 +14,13 @@ A ESP32-C3 dev-board from Espressif with IMU and Temp/Humidity sensor, originall
 -  I2C on 10/8 using Header connector
 -  WS2812B RGB LED on pin 2  (use [setStatusLight](/developer/status-light) to control)
 -  Serial logging on pin P21 at 115200 8N1
+
+{@import optional ./esp32c3-rust-devkit-features.mdp}
+
 -  Service: buttonBOOT (button)
+
+{@import optional ./esp32c3-rust-devkit-services.mdp}
+
 
 ## Stores
 
@@ -53,6 +59,8 @@ select "Espressif ESP32-C3-RUST-DevKit".
 ```ts
 import { pins, board } from "@dsboard/esp32c3_rust_devkit"
 ```
+
+{@import optional ./esp32c3-rust-devkit-examples.mdp}
 
 ## Firmware update
 

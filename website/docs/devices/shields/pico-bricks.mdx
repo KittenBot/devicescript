@@ -1,0 +1,25 @@
+---
+title: Pico Bricks
+---
+
+# Pico Bricks
+
+-   Device: [Raspberry Pi Pico W](/devices/rp2040/pico-w)
+-   [Home](https://picobricks.com/)
+
+![PicoBricks image](/img/shields/pico-bricks.jpg)
+
+## DeviceScript import
+
+You must import `PicoBricks` to access the shield services.
+
+In [Visual Studio Code](/getting-started/vscode),
+click the **wand** icon on the file menu and
+select "PicoBricks".
+
+```ts
+import { PicoBricks } from "@devicescript/drivers"
+const shield = new PicoBricks()
+
+const motor1 = shield.startMotor1()
+```

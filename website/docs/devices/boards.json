@@ -121,6 +121,46 @@
     "productId": "0x3ff6ffeb",
     "url": "https://www.espressif.com/en/products/socs/esp32"
   },
+  "esp32_c3fh4_rgb": {
+    "$description": "A tiny ESP32-C3 board with 5x5 LED array.",
+    "$fwUrl": "https://github.com/microsoft/devicescript-esp32/releases/latest/download/devicescript-esp32c3-esp32_c3fh4_rgb-0x0.bin",
+    "$schema": "https://raw.githubusercontent.com/microsoft/devicescript-esp32/main/boards/esp32deviceconfig.schema.json",
+    "$services": [
+      {
+        "name": "buttonBOOT",
+        "pin": 9,
+        "service": "button"
+      }
+    ],
+    "archId": "esp32c3",
+    "devName": "ESP32-C3FH4-RGB",
+    "i2c": {
+      "$connector": "Qwiic",
+      "pinSCL": 1,
+      "pinSDA": 0
+    },
+    "id": "esp32_c3fh4_rgb",
+    "led": {
+      "isMono": true,
+      "pin": 10
+    },
+    "log": {
+      "pinTX": 21
+    },
+    "pins": {
+      "LEDS": 8,
+      "P2": 2,
+      "P20": 20,
+      "P3": 3,
+      "P4": 4,
+      "P5": 5,
+      "P6": 6,
+      "P7": 7
+    },
+    "productId": "0x3a90885c",
+    "url": "https://github.com/01Space/ESP32-C3FH4-RGB",
+    "img": "https://microsoft.github.io/jacdac-docs/images/devices/01space/esp32c3fh4rgbv10.catalog.jpg"
+  },
   "esp32_devkit_c": {
     "$description": "There are currently issues with serial chip on these, best avoid. ESP32-DevKitC development board. This will also work with DOIT DevkitV1, NodeMCU ESP32, ... (search for 'esp32 devkit'). Some of these boards do not have the LED.",
     "$fwUrl": "https://github.com/microsoft/devicescript-esp32/releases/latest/download/devicescript-esp32-esp32_devkit_c-0x1000.bin",
@@ -237,6 +277,44 @@
     "productId": "0x33f29c59",
     "url": "https://github.com/esp-rs/esp-rust-board",
     "img": "https://microsoft.github.io/jacdac-docs/images/devices/espressif/esp32c3rustdevkitv12a.catalog.jpg"
+  },
+  "esp32c3_supermini": {
+    "$description": "A super tiny ESP32-C3 board.",
+    "$fwUrl": "https://github.com/microsoft/devicescript-esp32/releases/latest/download/devicescript-esp32c3-esp32c3_supermini-0x0.bin",
+    "$schema": "https://raw.githubusercontent.com/microsoft/devicescript-esp32/main/boards/esp32deviceconfig.schema.json",
+    "$services": [
+      {
+        "name": "buttonBOOT",
+        "pin": 9,
+        "service": "button"
+      }
+    ],
+    "archId": "esp32c3",
+    "devName": "ESP32-C3 SuperMini",
+    "i2c": {
+      "pinSCL": 7,
+      "pinSDA": 6
+    },
+    "id": "esp32c3_supermini",
+    "led": {
+      "isMono": true,
+      "pin": 8
+    },
+    "log": {
+      "pinTX": 21
+    },
+    "pins": {
+      "P0": 0,
+      "P1": 1,
+      "P10": 10,
+      "P2": 2,
+      "P20": 20,
+      "P3": 3,
+      "P4": 4,
+      "P5": 5
+    },
+    "productId": "0x31606c1c",
+    "url": "https://banggood.com/ESP32-C3-Development-Board-ESP32-SuperMini-WiFi-Bluetooth-Mini-Module-p-1997449.html"
   },
   "esp32s2_bare": {
     "$description": "A bare ESP32-S2 board without any pin functions.",
@@ -470,6 +548,134 @@
     "url": "https://unexpectedmaker.com/shop/feathers2-esp32-s2",
     "img": "https://microsoft.github.io/jacdac-docs/images/devices/unexpected-maker/feathers2esp32s2v20.catalog.jpg"
   },
+  "kittenbot_grapebit_esp32c3": {
+    "$description": "A round board packed with IMU, buzzer, motor control, 4 RGB LEDs, and Jacdac.",
+    "$fwUrl": "https://github.com/microsoft/devicescript-esp32/releases/latest/download/devicescript-esp32c3-kittenbot_grapebit_esp32c3-0x0.bin",
+    "$schema": "https://raw.githubusercontent.com/microsoft/devicescript-esp32/main/boards/esp32deviceconfig.schema.json",
+    "$services": [
+      {
+        "name": "buttonA",
+        "pin": 21,
+        "service": "button"
+      },
+      {
+        "name": "buttonB",
+        "pin": 9,
+        "service": "button"
+      },
+      {
+        "name": "music",
+        "pin": 3,
+        "service": "buzzer"
+      },
+      {
+        "dir": -1,
+        "en": -1,
+        "name": "M1",
+        "pwm": 1,
+        "service": "motor"
+      },
+      {
+        "dir": -1,
+        "en": -1,
+        "name": "M2",
+        "pwm": 4,
+        "service": "motor"
+      }
+    ],
+    "archId": "esp32c3",
+    "devName": "KittenBot Grape:Bit ESP32-C3",
+    "i2c": {
+      "pinSCL": 7,
+      "pinSDA": 6
+    },
+    "id": "kittenbot_grapebit_esp32c3",
+    "jacdac": {
+      "$connector": "Jacdac",
+      "pin": 5
+    },
+    "led": {
+      "num": 4,
+      "pin": 10,
+      "type": 1
+    },
+    "pins": {
+      "P1": 2,
+      "P2": 0
+    },
+    "productId": "0x38ccab8d",
+    "url": "https://www.kittenbot.cc/products/kittenbot-grapebit",
+    "img": "https://microsoft.github.io/jacdac-docs/images/devices/kittenbot/grapebitv10.catalog.jpg"
+  },
+  "kittenbot_nanoscript": {
+    "$description": "A RP2040 board featuring a Jacdac connector, compatible with SMT-mounting.",
+    "$fwUrl": "https://github.com/microsoft/devicescript-pico/releases/latest/download/devicescript-rp2040-kittenbot_nanoscript.uf2",
+    "$schema": "https://raw.githubusercontent.com/microsoft/devicescript-pico/main/boards/rp2040deviceconfig.schema.json",
+    "archId": "rp2040",
+    "devName": "KittenBot NanoScript 1.0",
+    "id": "kittenbot_nanoscript",
+    "jacdac": {
+      "$connector": "Jacdac",
+      "pin": 9
+    },
+    "led": {
+      "rgb": [
+        {
+          "mult": 250,
+          "pin": 16
+        },
+        {
+          "mult": 60,
+          "pin": 14
+        },
+        {
+          "mult": 150,
+          "pin": 15
+        }
+      ]
+    },
+    "log": {
+      "baud": 115200,
+      "pinTX": 0
+    },
+    "pins": {
+      "@HILIM": 18,
+      "P1": 1,
+      "P10": 10,
+      "P2": 2,
+      "P24": 24,
+      "P25": 25,
+      "P26": 26,
+      "P27": 27,
+      "P28": 28,
+      "P29": 29,
+      "P3": 3,
+      "P4": 4,
+      "P5": 5,
+      "P6": 6,
+      "P7": 7
+    },
+    "productId": "0x37c2fcc5",
+    "sPin": {
+      "#": "enable high power limiter mode",
+      "@HILIM": 0
+    },
+    "services": [
+      {
+        "faultIgnoreMs": 1000,
+        "mode": 3,
+        "name": "power",
+        "pinEn": 22,
+        "pinFault": 12,
+        "pinLedPulse": 13,
+        "pinPulse": 8,
+        "pinUsbDetect": 11,
+        "service": "power"
+      }
+    ],
+    "url": "https://www.kittenbot.cc/products/devicescript-enhanced-development-board-with-rp2040",
+    "img": "https://microsoft.github.io/jacdac-docs/images/devices/kittenbot/nanoscript2040v10.catalog.jpg"
+  },
   "msr124": {
     "$description": "Prototype board",
     "$fwUrl": "https://github.com/microsoft/devicescript-pico/releases/latest/download/devicescript-rp2040-msr124.uf2",
@@ -691,8 +897,7 @@
         "pinFault": 13,
         "service": "power"
       }
-    ],
-    "img": "https://microsoft.github.io/jacdac-docs/images/devices/microsoft-research/jmbrainesp3248v03.catalog.jpg"
+    ]
   },
   "msr59": {
     "$description": "Prototype board",
@@ -743,8 +948,7 @@
         "pinFault": 25,
         "service": "power"
       }
-    ],
-    "img": "https://microsoft.github.io/jacdac-docs/images/devices/microsoft-research/rp2040devicescript59v01.catalog.jpg"
+    ]
   },
   "pico": {
     "$description": "RP2040 board from Raspberry Pi.",

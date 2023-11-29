@@ -626,6 +626,7 @@ export function ellipse(text: string, maxChars: number, suffix = "...") {
 }
 
 export function ellipseFirstSentence(text: string) {
+    if (!text) return text
     const i = text.indexOf(".")
     if (i < 0) return text
     else return text.slice(0, i + 1)
@@ -727,4 +728,10 @@ export function parseIdentifier(value: number | string) {
     } else if (typeof value === "string" && /^[0-9]+$/i.test(value as string))
         return parseInt(value)
     return Number(value)
+}
+
+export function sortedBy<T>(arr: T[], key: (t: T) => string) {
+    arr = arr.slice();
+    arr.sort((a, b) => strcmp(key(a), key(b)));
+    return arr;
 }

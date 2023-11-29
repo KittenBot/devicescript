@@ -11,7 +11,7 @@ import {
     existsSync,
 } from "fs-extra"
 import { build } from "./build"
-import { spawnSync, execSync } from "node:child_process"
+import { spawnSync } from "node:child_process"
 import { assert, clone, randomUInt } from "jacdac-ts"
 import { addReqHandler } from "./sidedata"
 import type {
@@ -32,6 +32,7 @@ import { addBoard } from "./addboard"
 import { readJSON5Sync } from "./jsonc"
 import { MARKETPLACE_EXTENSION_ID } from "@devicescript/interop"
 import { TSDOC_TAGS } from "@devicescript/compiler"
+import { execCmd } from "./exec"
 
 const MAIN = "src/main.ts"
 const GITIGNORE = ".gitignore"
@@ -217,7 +218,7 @@ to the VS Code extension
 
 const optionalFiles: FileSet = {
     ".devcontainer/devcontainer.json": {
-        image: "mcr.microsoft.com/devcontainers/universal:2",
+        image: "mcr.microsoft.com/devcontainers/javascript-node:18",
         features: {
             "ghcr.io/devcontainers/features/node:1": {},
             "ghcr.io/devcontainers/features/github-cli:1": {},
@@ -450,6 +451,12 @@ export async function init(dir: string | undefined, options: InitOptions) {
     // ok, soft patch applied, now we apply more stuff that always has to be set
     // in case the project already had a package.json
     const pkg = readJSON5Sync("package.json") as PackageManifest
+
+    // name needed in worspace for install to work
+    if (!pkg.name)
+        pkg.name = dir && dir !== "./" ? dir : basename(process.cwd())
+    if (pkg.name === "./") pkg.name = "devicescript-demo"
+
     // ensure cli is added
     addCliDependency(pkg)
     // write down
@@ -500,12 +507,12 @@ export async function init(dir: string | undefined, options: InitOptions) {
 
     return finishAdd(
         `Your DeviceScript project is initialized.\n` +
-        `To get more help, https://microsoft.github.io/devicescript/getting-started/`,
+            `To get more help, https://microsoft.github.io/devicescript/getting-started/`,
         ["package.json", MAIN]
     )
 }
 
-export interface AddSimOptions extends InitOptions { }
+export interface AddSimOptions extends InitOptions {}
 
 export async function addSim(options: AddSimOptions) {
     log(`Adding simulator support`)
@@ -564,15 +571,7 @@ export interface AddNpmOptions extends InitOptions {
     name?: string
 }
 
-export interface AddSettingsOptions extends InitOptions { }
-
-export function execCmd(cmd: string) {
-    try {
-        return execSync(cmd, { encoding: "utf-8" }).trim()
-    } catch {
-        return ""
-    }
-}
+export interface AddSettingsOptions extends InitOptions {}
 
 export async function addSettings(options: AddSettingsOptions) {
     const files = clone(settingsFiles)
@@ -724,7 +723,7 @@ export async function addTest(options: AddTestOptions) {
     )
 }
 
-export interface AddTestOptions extends InitOptions { }
+export interface AddTestOptions extends InitOptions {}
 
 export function initAddCmds() {
     addReqHandler<SideAddBoardReq, SideAddBoardResp>("addBoard", d =>

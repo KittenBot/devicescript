@@ -11,6 +11,12 @@ A bare ESP32-S3 board without any pin functions.
 
 -  Serial logging on pin P43 at 115200 8N1
 
+{@import optional ./esp32s3-bare-features.mdp}
+
+
+{@import optional ./esp32s3-bare-services.mdp}
+
+
 :::caution
 
 I2C pins are not [configured](/developer/board-configuration).
@@ -51,7 +57,7 @@ I2C pins are not [configured](/developer/board-configuration).
 | **P43** |  GPIO43 |  log.pinTX,  io |
 | **P44** |  GPIO44 |  io |
 | **P45** |  GPIO45 |  boot,  io |
-| **P46** |  GPIO46 |  boot,  input |
+| **P46** |  GPIO46 |  boot,  io |
 | **P47** |  GPIO47 |  io |
 | **P48** |  GPIO48 |  io |
 | **P5** |  GPIO5 |  analogIn,  io |
@@ -75,6 +81,8 @@ select "Espressif ESP32-S3 (bare)".
 ```ts
 import { pins, board } from "@dsboard/esp32s3_bare"
 ```
+
+{@import optional ./esp32s3-bare-examples.mdp}
 
 ## Firmware update
 

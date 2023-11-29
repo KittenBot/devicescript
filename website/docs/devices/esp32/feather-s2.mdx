@@ -14,8 +14,14 @@ ESP32-S2 based development board in a Feather format.
 -  I2C on SDA/SCL using Qwiic connector
 -  LED on pin 40  (use [setStatusLight](/developer/status-light) to control)
 -  Serial logging on pin TX_D1 at 115200 8N1
+
+{@import optional ./feather-s2-features.mdp}
+
 -  Service: buttonBOOT (button)
 -  Service: ambientLight (analog:lightLevel)
+
+{@import optional ./feather-s2-services.mdp}
+
 
 ## Stores
 
@@ -67,6 +73,8 @@ select "Unexpected Maker FeatherS2 ESP32-S2".
 ```ts
 import { pins, board } from "@dsboard/feather_s2"
 ```
+
+{@import optional ./feather-s2-examples.mdp}
 
 ## Firmware update
 

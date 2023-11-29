@@ -11,6 +11,12 @@ A bare ESP32-S2 board without any pin functions.
 
 -  Serial logging on pin P43 at 115200 8N1
 
+{@import optional ./esp32s2-bare-features.mdp}
+
+
+{@import optional ./esp32s2-bare-services.mdp}
+
+
 :::caution
 
 I2C pins are not [configured](/developer/board-configuration).
@@ -76,6 +82,8 @@ select "Espressif ESP32-S2 (bare)".
 ```ts
 import { pins, board } from "@dsboard/esp32s2_bare"
 ```
+
+{@import optional ./esp32s2-bare-examples.mdp}
 
 ## Firmware update
 

@@ -14,6 +14,7 @@ import {
 import { DevToolsIface, sendEvent } from "./sidedata"
 import {
     ConnectReqArgs,
+    SideMissingPackageEvent,
     SideTransportEvent,
     TransportStatus,
     WebSocketConnectReqArgs,
@@ -26,6 +27,7 @@ import type {
     SideUploadJsonFromDevice,
 } from "@devicescript/interop"
 import { printDmesg } from "./vmworker"
+import { RequireError, tryRequire } from "./require"
 
 export interface TransportsOptions {
     usb?: boolean
@@ -33,29 +35,25 @@ export interface TransportsOptions {
     spi?: boolean
 }
 
-function tryRequire(name: string) {
-    return require(name)
-}
-
-function createSPI() {
+async function createSPI() {
     log(`adding SPI transport (requires "rpio" package)`)
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const RPIO = tryRequire("rpio")
+    const RPIO = await tryRequire("rpio")
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const SpiDev = tryRequire("spi-device")
+    const SpiDev = await tryRequire("spi-device")
     return createNodeSPITransport(RPIO, SpiDev)
 }
-function createUSB() {
+async function createUSB() {
     log(`adding USB transport (requires "usb" package)`)
-    const usb = tryRequire("usb")
-    const options = createNodeUSBOptions(usb.WebUSB)
-    return createUSBTransport(options)
+    const usb = await tryRequire("usb")
+    const usbOptions = createNodeUSBOptions(usb.WebUSB)
+    return createUSBTransport(usbOptions)
 }
-function createSerial() {
+async function createSerial() {
     log(`adding serial transport (requires "serialport" package)`)
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const SerialPort = tryRequire("serialport").SerialPort
-    return createNodeWebSerialTransport(SerialPort)
+    const sp = await tryRequire("serialport")
+    return createNodeWebSerialTransport(sp.SerialPort)
 }
 
 function createWebSocket(url: string, protocol: string) {
@@ -90,7 +88,11 @@ function createWebSocket(url: string, protocol: string) {
     return transport
 }
 
-export async function connectTransport(bus: JDBus, req: ConnectReqArgs) {
+export async function connectTransport(
+    devtools: DevToolsIface,
+    req: ConnectReqArgs
+) {
+    const bus = devtools.bus
     const { transport: type, background, resourceGroupId } = req
     // no type, reconnect all
     if (!type) {
@@ -110,28 +112,38 @@ export async function connectTransport(bus: JDBus, req: ConnectReqArgs) {
 
     // need to start transport
     let newTransport: Transport
-    switch (type) {
-        case "websocket": {
-            const { url, protocol } = req as WebSocketConnectReqArgs
-            newTransport = createWebSocket(url, protocol)
-            break
+    try {
+        switch (type) {
+            case "websocket": {
+                const { url, protocol } = req as WebSocketConnectReqArgs
+                newTransport = createWebSocket(url, protocol)
+                break
+            }
+            case "spi": {
+                newTransport = await createSPI()
+                break
+            }
+            case "serial": {
+                newTransport = await createSerial()
+                break
+            }
+            case "usb": {
+                newTransport = await createUSB()
+                break
+            }
+            case "none": {
+                // disconnect
+                break
+            }
         }
-        case "spi": {
-            newTransport = createSPI()
-            break
-        }
-        case "serial": {
-            newTransport = createSerial()
-            break
-        }
-        case "usb": {
-            newTransport = createUSB()
-            break
-        }
-        case "none": {
-            // disconnect
-            break
-        }
+    } catch (e) {
+        if (e instanceof RequireError) {
+            sendEvent<SideMissingPackageEvent>(
+                devtools.mainClient,
+                "missingPackage",
+                { packageName: e.packageName }
+            )
+        } else throw e
     }
 
     if (newTransport) {
@@ -142,11 +154,11 @@ export async function connectTransport(bus: JDBus, req: ConnectReqArgs) {
     await Promise.all(bus.transports.map(tr => tr.connect(background)))
 }
 
-export function createTransports(options: TransportsOptions) {
+export async function createTransports(options: TransportsOptions) {
     const transports: Transport[] = []
-    if (options.usb) transports.push(createUSB())
-    if (options.serial) transports.push(createSerial())
-    if (options.spi) transports.push(createSPI())
+    if (options.usb) transports.push(await createUSB())
+    if (options.serial) transports.push(await createSerial())
+    if (options.spi) transports.push(await createSPI())
     return transports
 }
 
