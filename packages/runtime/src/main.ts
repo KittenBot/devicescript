@@ -258,4 +258,109 @@ describe("number", () => {
         check(5.0000000000000001) // true, because of loss of precision
         check(4500000000000000.1) // true, because of loss of precision
     })
+    test("isNaN", () => {
+        const check = (v: unknown) => expect(Number.isNaN(v)).toBe(true)
+        const checkNot = (v: unknown) => expect(Number.isNaN(v)).toBe(false)
+
+        check(NaN)
+
+        checkNot("NaN")
+        checkNot(Infinity)
+        checkNot(-Infinity)
+        checkNot("5")
+        checkNot(5)
+        checkNot(true)
+        checkNot(false)
+        checkNot([NaN])
+    })
+
+    test("parseInt", () => {
+        const check = (v: unknown, r?: unknown) =>
+            expect(Number.parseInt(v, r)).toBe(15)
+        const checkNegative = (v: unknown, r?: unknown) =>
+            expect(Number.parseInt(v, r)).toBe(-15)
+        const checkNaN = (v: unknown, r?: unknown) =>
+            expect(isNaN(Number.parseInt(v, r))).toBe(true)
+
+        check("15")
+        check("0xf")
+        check("015", 10)
+        check("15,123", 10)
+        check("F", 16)
+        check("0xF", 16)
+        check("17", 8)
+        check("FXX123", 16)
+        check("1111", 2)
+        check("15 * 3", 10)
+        check("15e2", 10)
+        check("15px", 10)
+        check("12", 13)
+
+        checkNaN("Hello", 8)
+        checkNaN("546", 2)
+
+        checkNegative("-F", 16)
+        checkNegative("-0F", 16)
+        checkNegative("-0XF", 16)
+        checkNegative("-17", 8)
+        checkNegative("-15", 10)
+        checkNegative("-1111", 2)
+        checkNegative("-15e1", 10)
+        checkNegative("-12", 13)
+    })
+    test("parseFloat", () => {
+        const check = (v: unknown) => expect(Number.parseFloat(v)).toBe(3.14)
+        const checkNaN = (v: unknown) =>
+            expect(isNaN(Number.parseFloat(v))).toBe(isNaN(NaN))
+
+        const checkInfinity = (v: unknown) =>
+            expect(Number.parseFloat(v)).toBe(Infinity)
+
+        const checkMinusInfinity = (v: unknown) =>
+            expect(Number.parseFloat(v)).toBe(-Infinity)
+        check(3.14)
+        check("3.14")
+        check("  3.14  ")
+        check("314e-2")
+        check("0.0314E+2")
+        check("3.14some non-digit characters")
+        checkNaN("FF2")
+        checkNaN("NaN")
+        checkInfinity("1.7976931348623159e+308")
+        checkMinusInfinity("-1.7976931348623159e+308")
+        checkInfinity("Infinity")
+        checkMinusInfinity("-Infinity")
+    })
+    test("isFinite", () => {
+        const check = (v: unknown) => expect(Number.isFinite(v)).toBe(true)
+        const checkNot = (v: unknown) => expect(Number.isFinite(v)).toBe(false)
+
+        check(5)
+        check(5 / 3)
+
+        checkNot(Infinity)
+        checkNot(-Infinity)
+        checkNot(6 / 0)
+        checkNot([5])
+        checkNot("5")
+        checkNot(NaN)
+    })
+    test("isSafeInteger", () => {
+        const check = (v: unknown) => expect(Number.isSafeInteger(v)).toBe(true)
+        const checkNot = (v: unknown) =>
+            expect(Number.isSafeInteger(v)).toBe(false)
+
+        check(3)
+        check(3.0)
+        check(2 ** 53 - 1)
+        check(-(2 ** 53 - 1))
+
+        checkNot(2 ** 53)
+        checkNot(-(2 ** 53))
+        checkNot(NaN)
+        checkNot(Infinity)
+        checkNot(-Infinity)
+        checkNot("3")
+        checkNot(3.1)
+    })
 })

@@ -1,7 +1,7 @@
 {
     "name": "@kittenbot/devs_compiler",
     "private": false,
-    "version": "2.15.20",
+    "version": "2.16.1",
     "description": "DeviceScript Compiler",
     "keywords": [
         "devicescript",
@@ -25,14 +25,14 @@
         "./built/**"
     ],
     "engines": {
-        "node": ">=16"
+        "node": ">=20"
     },
     "license": "MIT",
     "devDependencies": {
         "@devicescript/interop": "*",
-        "@types/fs-extra": "^11.0.1",
-        "@types/node": "^16",
-        "esbuild": "^0.17.11",
+        "@types/fs-extra": "^11.0.4",
+        "@types/node": "^20",
+        "esbuild": "^0.19.9",
         "jacdac-ts": "*",
         "typescript": "^4.9.5"
     },

@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v2.16.0](https://github.com/microsoft/devicescript/compare/v2.15.23...v2.16.0)
+
+> 2 January 2024
+
+- attempt at migrating to node 20 [`#673`](https://github.com/microsoft/devicescript/pull/673)
+- added rp2040 error message [`e63fe9e`](https://github.com/microsoft/devicescript/commit/e63fe9e000e5e02d053e000da7d10535e5110206)
+- switch quiet or verbose [`899a390`](https://github.com/microsoft/devicescript/commit/899a390d82ff2cdf3bdf9894f4c3ad461f2c9bf2)
+
+#### [v2.15.23](https://github.com/microsoft/devicescript/compare/v2.15.22...v2.15.23)
+
+> 13 December 2023
+
+- Added Number.parseInt [`#669`](https://github.com/microsoft/devicescript/pull/669)
+- updated yarn.lock [`693e2ec`](https://github.com/microsoft/devicescript/commit/693e2eca36fb677ced4714c3d99580f0af3b45e7)
+- add verbose flag [`4afe607`](https://github.com/microsoft/devicescript/commit/4afe6078ab688240370dbe9550508ca8225113a4)
+- updated .gitignore [`0e9d2d4`](https://github.com/microsoft/devicescript/commit/0e9d2d42bc710237d536a9a4c140c1cf6b595447)
+
+#### [v2.15.22](https://github.com/microsoft/devicescript/compare/v2.15.21...v2.15.22)
+
+> 5 December 2023
+
+- Add Number.parseFloat [`#668`](https://github.com/microsoft/devicescript/pull/668)
+- Number.isFinite [`#666`](https://github.com/microsoft/devicescript/pull/666)
+- Add Number.isSafeInteger [`#667`](https://github.com/microsoft/devicescript/pull/667)
+- updated ts/c [`5536f59`](https://github.com/microsoft/devicescript/commit/5536f593d177239fcb9928cefc2737e33634d5a3)
+
+#### [v2.15.21](https://github.com/microsoft/devicescript/compare/v2.15.20...v2.15.21)
+
+> 30 November 2023
+
+- Added Number.isNaN [`#665`](https://github.com/microsoft/devicescript/pull/665)
+- updated jacdac-ts [`bf5b846`](https://github.com/microsoft/devicescript/commit/bf5b8460f1fbad3c59d12fc3d251f1d188d6249c)
+
+#### [v2.15.20](https://github.com/microsoft/devicescript/compare/v2.15.19...v2.15.20)
+
+> 22 November 2023
+
+- Add ILI9341 driver support [`#663`](https://github.com/microsoft/devicescript/pull/663)
+- emit ds.Role._onPacket properly [`#659`](https://github.com/microsoft/devicescript/issues/659)
+- add --diff option to devs disasm [`e42e955`](https://github.com/microsoft/devicescript/commit/e42e955dc12a027088476e078212d3268135bd08)
+- add repro [`11be29c`](https://github.com/microsoft/devicescript/commit/11be29cd39b2beda01d16ecb5b1a40dcfc941f09)
+- add samples with accelerometer [`44fa373`](https://github.com/microsoft/devicescript/commit/44fa3734e873d2d4552b98ba55b7f5e26bbc63a4)
+
 #### [v2.15.19](https://github.com/microsoft/devicescript/compare/v2.15.18...v2.15.19)
 
 > 7 November 2023

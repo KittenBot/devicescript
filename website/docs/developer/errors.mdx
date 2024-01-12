@@ -28,7 +28,7 @@ are due to invalid configurations, aside from hardware issues with the sensor.
 -   The I2C address is incorrect. Check the datasheet for the correct address.
 -   The I2C address is correct, but the sensor is not responding. Check the wiring and the sensor datasheet.
 
-## Unable to locate Node.JS v16+. {#terminal-nodemissing}
+## Unable to locate Node.JS. {#terminal-nodemissing}
 
 The Visual Studio Code extension was unable to determine the version of Node.JS.
 This may mean that Node.JS is not installed or not in the path,
@@ -67,3 +67,9 @@ Make sure that your device is actively connected either through the connection h
 
 DeviceScript is trying to deploy bytecode but it found multiple connected DeviceScript devices. There should only be 1 connect device to deploy
 or the tool will give up.
+
+## error can't alloc pcb {#error-cant-alloc-pcb}
+
+TLS is not yet supported on RP2040. 
+See [implementation status](https://microsoft.github.io/devicescript/devices#implementation-status) 
+and [issue 664](https://github.com/microsoft/devicescript/issues/664).
